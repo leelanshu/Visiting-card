@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Sparsh Media — Visiting Card Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --orange: #F47920;
+  --orange-light: #FF9A45;
+  --orange-dark: #D4641A;
+  --orange-pale: #FFF3EA;
+  --orange-pale2: #FFE8D4;
+  --white: #FFFFFF;
+  --bg: #F9F6F3;
+  --text: #1A1A1A;
+  --muted: #888;
+  --border: #E8E0D8;
+  --card: #FFFFFF;
+  --green: #27AE60;
+  --radius: 14px;
+  --shadow: 0 2px 16px rgba(244,121,32,0.10);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Poppins', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding-bottom: 48px;
+}
+
+/* ── HEADER ── */
+.header {
+  background: var(--white);
+  border-bottom: 3px solid var(--orange);
+  padding: 14px 16px 12px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(244,121,32,0.08);
+}
+.header-inner {
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.logo-wrap img {
+  height: 36px;
+  width: auto;
+  display: block;
+}
+.header-divider {
+  width: 1.5px;
+  height: 32px;
+  background: var(--border);
+}
+.header-text h1 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--orange);
+  letter-spacing: 0.3px;
+}
+.header-text p {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+/* ── MAIN ── */
+.main {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 14px 12px;
+}
+
+/* ── CARD ── */
+.card {
+  background: var(--white);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  padding: 16px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow);
+}
+
+/* ── STEP LABEL ── */
+.step-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.step-num {
+  width: 24px;
+  height: 24px;
+  background: var(--orange);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.step-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.2px;
+}
+.step-sub {
+  font-size: 10px;
+  color: var(--muted);
+  margin-left: auto;
+}
+
+/* ── QUICK QTY ── */
+.qty-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.qty-btn {
+  background: var(--orange-pale);
+  border: 1.5px solid var(--orange-pale2);
+  color: var(--orange-dark);
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 13px 6px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+  outline: none;
+}
+.qty-btn.active {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: white;
+  box-shadow: 0 4px 12px rgba(244,121,32,0.35);
+  transform: translateY(-1px);
+}
+.qty-btn:active { transform: scale(0.96); }
+
+/* custom qty row */
+.custom-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--orange-pale);
+  border: 1.5px solid var(--orange-pale2);
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+.custom-row label {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.custom-row input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--orange-dark);
+  min-width: 0;
+}
+.custom-row input::placeholder { color: var(--muted); font-weight: 400; }
+
+/* sheets pill */
+.sheets-pill {
+  margin-top: 10px;
+  background: var(--orange-pale);
+  border-radius: 8px;
+  padding: 8px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: var(--muted);
+}
+.sheets-pill strong { color: var(--orange); font-size: 16px; }
+
+/* ── FIELD ── */
+.field { margin-bottom: 12px; }
+.field:last-child { margin-bottom: 0; }
+.field-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+/* ── TOGGLE OPTS ── */
+.opt-row {
+  display: flex;
+  gap: 6px;
+}
+.opt-btn {
+  flex: 1;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  color: var(--muted);
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 9px 4px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: center;
+  outline: none;
+}
+.opt-btn.active {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: white;
+}
+.opt-btn:active { transform: scale(0.96); }
+
+/* ── BOX TOGGLE ── */
+.box-row { display: flex; gap: 8px; }
+.box-btn {
+  flex: 1;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 11px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  color: var(--muted);
+  outline: none;
+}
+.box-btn.yes-on { background: #EAF7EE; border-color: var(--green); color: var(--green); }
+.box-btn.no-on  { background: #FEECEC; border-color: #E74C3C; color: #E74C3C; }
+.box-btn:active { transform: scale(0.97); }
+
+/* ── BREAKDOWN ── */
+.breakdown {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.brow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.2s;
+}
+.brow:last-child { border-bottom: none; }
+.brow.lit { background: var(--orange-pale); }
+.brow .bl { font-size: 12px; color: var(--muted); font-weight: 500; }
+.brow .bc { font-size: 13px; font-weight: 700; color: var(--border); }
+.brow.lit .bc { color: var(--orange-dark); }
+.brow .fixed-cost { color: var(--text); }
+
+/* ── RESULT CARD ── */
+.result-card {
+  background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
+  border-radius: var(--radius);
+  padding: 20px 16px 16px;
+  margin-bottom: 10px;
+  box-shadow: 0 8px 24px rgba(244,121,32,0.30);
+  position: relative;
+  overflow: hidden;
+}
+.result-card::before {
+  content: '';
+  position: absolute;
+  top: -30px; right: -30px;
+  width: 120px; height: 120px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 50%;
+}
+.result-card::after {
+  content: '';
+  position: absolute;
+  bottom: -20px; left: -20px;
+  width: 80px; height: 80px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 50%;
+}
+.result-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  position: relative; z-index: 1;
+}
+.result-lbl {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.result-qty {
+  font-size: 11px;
+  color: rgba(255,255,255,0.6);
+  margin-top: 2px;
+}
+.result-total {
+  font-family: 'Playfair Display', serif;
+  font-size: 48px;
+  color: white;
+  line-height: 1;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.result-boxes {
+  display: flex;
+  gap: 8px;
+  position: relative; z-index: 1;
+}
+.result-box {
+  flex: 1;
+  background: rgba(255,255,255,0.15);
+  border-radius: 10px;
+  padding: 10px 10px 8px;
+  backdrop-filter: blur(4px);
+}
+.rb-label {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 4px;
+}
+.rb-value {
+  font-size: 20px;
+  font-weight: 800;
+  color: white;
+}
+.rb-value.sale-val { color: #B8F5CC; }
+
+/* ── RESET ── */
+.reset-btn {
+  width: 100%;
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--muted);
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.5px;
+}
+.reset-btn:hover { border-color: var(--orange); color: var(--orange); }
+.reset-btn:active { transform: scale(0.98); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.card { animation: fadeUp 0.3s ease both; }
+.card:nth-child(1) { animation-delay: 0.05s; }
+.card:nth-child(2) { animation-delay: 0.10s; }
+.card:nth-child(3) { animation-delay: 0.15s; }
+.card:nth-child(4) { animation-delay: 0.20s; }
+.result-card { animation: fadeUp 0.3s ease 0.25s both; }
+
+@keyframes popNum {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+.pop { animation: popNum 0.25s ease; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo-wrap">
+      <img src="/mnt/user-data/uploads/sparshmedia__2_.png" alt="Sparsh Media" onerror="this.style.display='none'; document.getElementById('logoText').style.display='block'">
+      <span id="logoText" style="display:none;font-family:'Poppins',sans-serif;font-weight:800;font-size:18px;color:#F47920;">sparsh<span style="color:#555">media</span></span>
+    </div>
+    <div class="header-divider"></div>
+    <div class="header-text">
+      <h1>Visiting Card Calculator</h1>
+      <p>Think · Create · Innovate</p>
+    </div>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- STEP 1: QUANTITY -->
+  <div class="card">
+    <div class="step-label">
+      <div class="step-num">1</div>
+      <span class="step-title">Quantity Chuniye</span>
+      <span class="step-sub">Cards kitni chahiye?</span>
+    </div>
+
+    <div class="qty-grid">
+      <button class="qty-btn active" onclick="selectQty(100, this)">100</button>
+      <button class="qty-btn" onclick="selectQty(200, this)">200</button>
+      <button class="qty-btn" onclick="selectQty(500, this)">500</button>
+      <button class="qty-btn" onclick="selectQty(1000, this)">1,000</button>
+      <button class="qty-btn" onclick="selectQty(2000, this)">2,000</button>
+      <button class="qty-btn" onclick="selectQty(5000, this)">5,000</button>
+    </div>
+
+    <div class="custom-row">
+      <label>Custom:</label>
+      <input type="number" id="customQty" placeholder="Koi bhi number likhein..." min="1" oninput="customQtyInput(this)">
+    </div>
+
+    <div class="sheets-pill">
+      <span>Sheets ki zaroorat (÷ 25 cards/sheet)</span>
+      <strong id="sheetsVal">4</strong>
+    </div>
+  </div>
+
+  <!-- STEP 2: FINISHING -->
+  <div class="card">
+    <div class="step-label">
+      <div class="step-num">2</div>
+      <span class="step-title">Finishing Options</span>
+    </div>
+
+    <div class="field">
+      <div class="field-label">Velvet Lamination</div>
+      <div class="opt-row" id="g-velvet">
+        <button class="opt-btn" onclick="setOpt('velvet','NA',this)">NA</button>
+        <button class="opt-btn" onclick="setOpt('velvet','single side',this)">Single Side</button>
+        <button class="opt-btn active" onclick="setOpt('velvet','both sides',this)">Both Sides</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">UV Coating</div>
+      <div class="opt-row" id="g-uv">
+        <button class="opt-btn active" onclick="setOpt('uv','NA',this)">NA</button>
+        <button class="opt-btn" onclick="setOpt('uv','single side',this)">Single Side</button>
+        <button class="opt-btn" onclick="setOpt('uv','both sides',this)">Both Sides</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">Foiling</div>
+      <div class="opt-row" id="g-foiling">
+        <button class="opt-btn active" onclick="setOpt('foiling','NA',this)">NA</button>
+        <button class="opt-btn" onclick="setOpt('foiling','single side',this)">Single Side</button>
+        <button class="opt-btn" onclick="setOpt('foiling','both sides',this)">Both Sides</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">UV + Foiling</div>
+      <div class="opt-row" id="g-uvfoiling">
+        <button class="opt-btn active" onclick="setOpt('uvfoiling','NA',this)">NA</button>
+        <button class="opt-btn" onclick="setOpt('uvfoiling','single side',this)">Single Side</button>
+        <button class="opt-btn" onclick="setOpt('uvfoiling','both sides',this)">Both Sides</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">Lamination</div>
+      <div class="opt-row" id="g-lamination">
+        <button class="opt-btn active" onclick="setOpt('lamination','no lamination',this)">None</button>
+        <button class="opt-btn" onclick="setOpt('lamination','single side',this)">Single Side</button>
+        <button class="opt-btn" onclick="setOpt('lamination','both sides',this)">Both Sides</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 3: PRINTING & CUTTING -->
+  <div class="card">
+    <div class="step-label">
+      <div class="step-num">3</div>
+      <span class="step-title">Printing & Cutting</span>
+    </div>
+
+    <div class="field">
+      <div class="field-label">Printing (12×18 · 300/320 GSM)</div>
+      <div class="opt-row" id="g-printing">
+        <button class="opt-btn" onclick="setOpt('printing','single side',this)">Single Side</button>
+        <button class="opt-btn active" onclick="setOpt('printing','both sides',this)">Both Sides</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="field-label">Cutting Type</div>
+      <div class="opt-row" id="g-cutting">
+        <button class="opt-btn active" onclick="setOpt('cutting','normal cutting',this)">Normal Cutting</button>
+        <button class="opt-btn" onclick="setOpt('cutting','round corner',this)">Round Corner</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 4: BOX -->
+  <div class="card">
+    <div class="step-label">
+      <div class="step-num">4</div>
+      <span class="step-title">Box Packaging</span>
+      <span class="step-sub">₹10 per 100 cards</span>
+    </div>
+    <div class="box-row">
+      <button class="box-btn yes-on" id="boxYes" onclick="setBox('YES')">✓ Haan, Box Chahiye</button>
+      <button class="box-btn" id="boxNo" onclick="setBox('NO')">✗ Nahi</button>
+    </div>
+  </div>
+
+  <!-- COST BREAKDOWN -->
+  <div class="card">
+    <div class="step-label">
+      <div class="step-num" style="background:var(--orange-pale);color:var(--orange);">₹</div>
+      <span class="step-title">Cost Breakdown</span>
+    </div>
+    <div class="breakdown">
+      <div class="brow" id="br-velvet">
+        <span class="bl">Velvet Lamination</span>
+        <span class="bc" id="bc-velvet">₹0</span>
+      </div>
+      <div class="brow" id="br-uv">
+        <span class="bl">UV Coating</span>
+        <span class="bc" id="bc-uv">₹0</span>
+      </div>
+      <div class="brow" id="br-foiling">
+        <span class="bl">Foiling</span>
+        <span class="bc" id="bc-foiling">₹0</span>
+      </div>
+      <div class="brow" id="br-uvfoiling">
+        <span class="bl">UV + Foiling</span>
+        <span class="bc" id="bc-uvfoiling">₹0</span>
+      </div>
+      <div class="brow" id="br-lamination">
+        <span class="bl">Lamination</span>
+        <span class="bc" id="bc-lamination">₹0</span>
+      </div>
+      <div class="brow" id="br-printing">
+        <span class="bl">Printing</span>
+        <span class="bc" id="bc-printing">₹0</span>
+      </div>
+      <div class="brow" id="br-cutting">
+        <span class="bl">Cutting</span>
+        <span class="bc" id="bc-cutting">₹0</span>
+      </div>
+      <div class="brow lit">
+        <span class="bl">Fixed Cost</span>
+        <span class="bc fixed-cost">₹50</span>
+      </div>
+      <div class="brow" id="br-box">
+        <span class="bl">Box Cost</span>
+        <span class="bc" id="bc-box">₹0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result-card" id="resultCard">
+    <div class="result-top">
+      <div>
+        <div class="result-lbl">Total Cost</div>
+        <div class="result-qty" id="resultQtyLine">100 cards · 4 sheets</div>
+      </div>
+      <div class="result-total" id="resultTotal">₹850</div>
+    </div>
+    <div class="result-boxes">
+      <div class="result-box">
+        <div class="rb-label">Purchase / Card</div>
+        <div class="rb-value" id="purchaseVal">₹8.50</div>
+      </div>
+      <div class="result-box">
+        <div class="rb-label">Sale Price (+25%)</div>
+        <div class="rb-value sale-val" id="saleVal">₹10.63</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="reset-btn" onclick="resetAll()">↺ Reset — Default Values Par Wapas Jao</button>
+
+</main>
+
+<script>
+const S = {
+  qty: 100,
+  velvet: 'both sides',
+  uv: 'NA',
+  foiling: 'NA',
+  uvfoiling: 'NA',
+  lamination: 'no lamination',
+  printing: 'both sides',
+  cutting: 'normal cutting',
+  box: 'YES'
+};
+
+const QTYS = [100,200,500,1000,2000,5000];
+
+function selectQty(n, btn) {
+  S.qty = n;
+  document.getElementById('customQty').value = '';
+  document.querySelectorAll('.qty-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  calculate();
+}
+
+function customQtyInput(inp) {
+  const v = parseInt(inp.value);
+  if (!v || v < 1) return;
+  S.qty = v;
+  document.querySelectorAll('.qty-btn').forEach(b => b.classList.remove('active'));
+  calculate();
+}
+
+function setOpt(key, val, btn) {
+  S[key] = val;
+  btn.parentElement.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  calculate();
+}
+
+function setBox(v) {
+  S.box = v;
+  document.getElementById('boxYes').className = 'box-btn' + (v==='YES' ? ' yes-on' : '');
+  document.getElementById('boxNo').className  = 'box-btn' + (v==='NO'  ? ' no-on'  : '');
+  calculate();
+}
+
+const ceil = (n,d=0) => Math.ceil(n * Math.pow(10,d)) / Math.pow(10,d);
+
+function sheets(qty) { return Math.ceil(qty / 25); }
+
+function cVelvet(side, sh) {
+  if (side==='NA') return 0;
+  const m = side==='both sides' ? 2 : 1;
+  return sh<=50 ? 300 : sh*6*m;
+}
+
+function cUV(side, sh) {
+  if (side==='NA') return 0;
+  const m = side==='both sides' ? 2 : 1;
+  if (sh<=5)   return 400;
+  if (sh<=20)  return 55*sh*m;
+  if (sh<=50)  return 45*sh*m;
+  if (sh<=100) return 35*sh*m;
+  if (sh<=200) return 30*sh*m;
+  return 25*sh*m;
+}
+
+function cFoiling(side, sh) {
+  if (side==='NA') return 0;
+  const m = side==='both sides' ? 2 : 1;
+  if (sh<=5)   return 400;
+  if (sh<=20)  return 60*sh*m;
+  if (sh<=50)  return 50*sh*m;
+  if (sh<=100) return 40*sh*m;
+  if (sh<=200) return 35*sh*m;
+  return 30*sh*m;
+}
+
+function cUVFoiling(side, sh) {
+  if (side==='NA') return 0;
+  const m = side==='both sides' ? 2 : 1;
+  if (sh<=5)   return 800;
+  if (sh<=20)  return 115*sh*m;
+  if (sh<=50)  return 95*sh*m;
+  if (sh<=100) return 75*sh*m;
+  if (sh<=200) return 65*sh*m;
+  return 55*sh*m;
+}
+
+function cLamination(side, sh) {
+  if (side==='no lamination') return 0;
+  if (side==='single side') return sh<=20 ? 50 : sh*2;
+  if (side==='both sides')  return sh<=20 ? 70 : sh*4;
+  return 0;
+}
+
+function cPrinting(side, sh) {
+  if (side==='single side') return sh<=20 ? 10*sh : 9*sh;
+  return sh<=20 ? 17*sh : 15*sh;
+}
+
+function cCutting(type, sh) {
+  if (type==='normal cutting') {
+    if (sh<=40)  return 50;
+    if (sh<=100) return 80;
+    if (sh<=150) return 100;
+    return 150;
+  }
+  if (sh<=40)  return 80;
+  if (sh<=100) return 150;
+  if (sh<=150) return 200;
+  return 220;
+}
+
+function cBox(v, qty) {
+  return v.toLowerCase()==='yes' ? Math.ceil(qty/100)*10 : 0;
+}
+
+function fmt(n) {
+  if (Number.isInteger(n)) return '₹' + n.toLocaleString('en-IN');
+  return '₹' + n.toFixed(2);
+}
+
+function setRow(id, cost) {
+  const row = document.getElementById('br-'+id);
+  const cel = document.getElementById('bc-'+id);
+  cel.textContent = fmt(cost);
+  if (cost > 0) {
+    row.classList.add('lit');
+    cel.style.color = 'var(--orange-dark)';
+  } else {
+    row.classList.remove('lit');
+    cel.style.color = 'var(--border)';
+  }
+}
+
+function popEl(id) {
+  const el = document.getElementById(id);
+  el.classList.remove('pop');
+  void el.offsetWidth;
+  el.classList.add('pop');
+}
+
+function calculate() {
+  const qty = S.qty || 1;
+  const sh  = sheets(qty);
+
+  document.getElementById('sheetsVal').textContent = sh;
+
+  const costs = {
+    velvet:    cVelvet(S.velvet, sh),
+    uv:        cUV(S.uv, sh),
+    foiling:   cFoiling(S.foiling, sh),
+    uvfoiling: cUVFoiling(S.uvfoiling, sh),
+    lamination:cLamination(S.lamination, sh),
+    printing:  cPrinting(S.printing, sh),
+    cutting:   cCutting(S.cutting, sh),
+    box:       cBox(S.box, qty)
+  };
+
+  Object.entries(costs).forEach(([k,v]) => setRow(k, v));
+
+  const total = Object.values(costs).reduce((a,b)=>a+b,0) + 50;
+  const purchase = total / qty;
+  const sale = purchase * 1.25;
+
+  document.getElementById('resultTotal').textContent = fmt(total);
+  document.getElementById('resultQtyLine').textContent = qty.toLocaleString('en-IN') + ' cards · ' + sh + ' sheets';
+  document.getElementById('purchaseVal').textContent = fmt(purchase);
+  document.getElementById('saleVal').textContent = fmt(sale);
+
+  popEl('resultTotal');
+}
+
+function resetAll() {
+  S.qty = 100;
+  S.velvet = 'both sides'; S.uv = 'NA'; S.foiling = 'NA'; S.uvfoiling = 'NA';
+  S.lamination = 'no lamination'; S.printing = 'both sides'; S.cutting = 'normal cutting'; S.box = 'YES';
+
+  document.getElementById('customQty').value = '';
+  document.querySelectorAll('.qty-btn').forEach((b,i) => {
+    b.classList.toggle('active', i===0);
+  });
+
+  const defaults = {
+    'g-velvet':    'both sides',
+    'g-uv':        'NA',
+    'g-foiling':   'NA',
+    'g-uvfoiling': 'NA',
+    'g-lamination':'no lamination',
+    'g-printing':  'both sides',
+    'g-cutting':   'normal cutting'
+  };
+  const textMap = { 'no lamination':'None','normal cutting':'Normal Cutting','both sides':'Both Sides','NA':'NA','single side':'Single Side','round corner':'Round Corner' };
+
+  for (const [gid, dval] of Object.entries(defaults)) {
+    const grp = document.getElementById(gid);
+    grp.querySelectorAll('.opt-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.textContent.trim() === (textMap[dval]||dval));
+    });
+  }
+
+  setBox('YES');
+  calculate();
+}
+
+calculate();
+</script>
+</body>
+</html>
