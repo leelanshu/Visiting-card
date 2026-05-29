@@ -463,7 +463,7 @@ body {
 @media (max-width: 900px) {
   .app-layout {
     grid-template-columns: 1fr;
-    padding: 16px 12px 220px;
+    padding: 16px 12px 280px;
     gap: 12px;
   }
   .right-panel {
@@ -524,8 +524,8 @@ body {
     <div class="card">
       <div class="step-label">
         <div class="step-num">1</div>
-        <span class="step-title">Quantity Chuniye</span>
-        <span class="step-sub">Cards kitni chahiye?</span>
+        <span class="step-title">Select Quantity</span>
+        <span class="step-sub">How many cards do you need?</span>
       </div>
       <div class="qty-grid">
         <button class="qty-btn active" onclick="selectQty(100, this)">100</button>
@@ -537,10 +537,10 @@ body {
       </div>
       <div class="custom-row">
         <label>Custom:</label>
-        <input type="number" id="customQty" placeholder="Koi bhi quantity likhein..." min="1" oninput="customQtyInput(this)">
+        <input type="number" id="customQty" placeholder="Enter any quantity..." min="1" oninput="customQtyInput(this)">
       </div>
       <div class="sheets-pill">
-        <span>Sheets ki zaroorat (÷ 25 cards/sheet)</span>
+        <span>Sheets required (÷ 25 cards/sheet)</span>
         <strong id="sheetsVal">4</strong>
       </div>
     </div>
@@ -629,8 +629,8 @@ body {
         <span class="step-sub">₹10 per 100 cards</span>
       </div>
       <div class="box-row">
-        <button class="box-btn yes-on" id="boxYes" onclick="setBox('YES')">✓ &nbsp;Haan, Box Chahiye</button>
-        <button class="box-btn" id="boxNo" onclick="setBox('NO')">✗ &nbsp;Nahi Chahiye</button>
+        <button class="box-btn yes-on" id="boxYes" onclick="setBox('YES')">✓ &nbsp;Yes, Add Box</button>
+        <button class="box-btn" id="boxNo" onclick="setBox('NO')">✗ &nbsp;No, Skip</button>
       </div>
     </div>
 
@@ -706,7 +706,7 @@ body {
 
     <button class="reset-btn" onclick="resetAll()">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-      Reset — Default Values Par Wapas Jao
+      Reset — Restore Default Values
     </button>
 
   </div>
